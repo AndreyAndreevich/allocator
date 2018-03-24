@@ -1,6 +1,6 @@
 template<typename T>
 class my_allocator {
-  size_t N = 10;
+  const size_t N = 10;
   size_t cout = 0;
   T* p;
 public:
@@ -18,25 +18,21 @@ public:
 
   T* allocate(std::size_t n) {
     std::cout << __PRETTY_FUNCTION__ << "[n = " << n << "]" << std::endl;
-    if (cout > 0 && cout < 10) {
-      cout++;
+    if (cout++%N) {
       p++;
     }
     else {
       p = reinterpret_cast<T *>(std::malloc(N*n*sizeof(T)));
       if (!p)
         throw std::bad_alloc();
-      cout++;
     }
-    std::cout << cout << " " << sizeof(T) << std::endl;
     return p;
   }
 
   void deallocate(T* p,std::size_t n) {
     std::cout << __PRETTY_FUNCTION__ << "[n = " << n << "]" << std::endl;
-    if (!--cout) 
-      std::free(p);
-    std::cout << cout << std::endl;
+    if (!(--cout%N))
+      std::free(p); 
   }
 
   template<typename U, typename ... Args>
