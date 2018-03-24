@@ -1,22 +1,53 @@
 template<typename T>
-T* allocate(std::size_t n) {
-  auto p = std::malloc(n*sizeof(T));
-  if (!p)
-    throw std::bad_alloc();
-  return reinterpret_cast<T *>(p);
-}
+class my_allocator {
+  size_t N = 10;
+  size_t cout = 0;
+  T* p;
+public:
+  using value_type = T;
 
-template<typename T>
-void deallocate(T* p,std::size_t n) {
-  std::free(p);
-}
+  using pointer = T*;
+  using const_pointer = const T*;
+  using reference = T&;
+  using const_reference = const T&;
 
-template<typename U, typename ...Args>
-void constuct(U* p, Args&& ...args) {
-  new(p) U(std::forward(args)...);
-}
+  template<typename U>
+  struct rebind {
+    using other = my_allocator<U>;
+  };
 
-template<typename T>
-void destroy(T* p) {
-  p->~T();
-}
+  T* allocate(std::size_t n) {
+    std::cout << __PRETTY_FUNCTION__ << "[n = " << n << "]" << std::endl;
+    if (cout > 0 && cout < 10) {
+      cout++;
+      p++;
+    }
+    else {
+      p = reinterpret_cast<T *>(std::malloc(N*n*sizeof(T)));
+      if (!p)
+        throw std::bad_alloc();
+      cout++;
+    }
+    std::cout << cout << " " << sizeof(T) << std::endl;
+    return p;
+  }
+
+  void deallocate(T* p,std::size_t n) {
+    std::cout << __PRETTY_FUNCTION__ << "[n = " << n << "]" << std::endl;
+    if (!--cout) 
+      std::free(p);
+    std::cout << cout << std::endl;
+  }
+
+  template<typename U, typename ... Args>
+  void construct(U *p, Args&& ... args) {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    new(p) U(std::forward<Args>(args)...);
+  }
+
+  void destroy(T* p) {
+    std::cout << __PRETTY_FUNCTION__ << std::endl;
+    p->~T();
+  }
+
+};
