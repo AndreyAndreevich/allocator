@@ -1,34 +1,33 @@
 template<typename T>
 class my_container {
-  size_t* count = nullptr;
-  my_container* next_el = nullptr;
-  my_container* end_el = nullptr;
-  T data;
+
+  struct element {
+    element* next = nullptr;
+    T data;
+  };
+
+  size_t count = 0;
+  element* front_el = nullptr;
+  element* end_el = nullptr;
+
 public:
-  my_container() {
-    if (count)
-      (*count)++;
-    else 
-      count = new size_t(0);
-  }
+
   void push(T data) {
-    if (!count) {
-      count = new size_t(0);
-    }
-    if (*count) {
-      end_el->next_el = new my_container();
-      end_el = end_el->next_el;
+    if (count) {
+      end_el->next = new element;
+      end_el = end_el->next;
       end_el->data = data;
     } else {
-      this->data = data;
-      end_el = this;
+      front_el = new element;
+      front_el->data = data;
+      end_el = front_el;
     }
-    (*count)++;
+    count++;
   }
 
   T front() {
     if (count)
-      return this->data;
+      return front_el->data;
   }
 
   T back() {
@@ -37,22 +36,18 @@ public:
   }
 
   void pop() {
-    if (!count)
-      return;
-    if (*count > 1) {
-      (*count)--;
-      std::swap(data,next_el->data);
-      std::swap(next_el,next_el->next_el);
-      delete next_el;
-      if (*count == 1) {
-        end_el = this;
-        next_el = nullptr;
-      }
-    } else {
-      next_el = nullptr;
+    auto p = front_el;
+    if (count > 1) {
+      front_el = front_el->next;
+      delete p;
+      count--;
+    } 
+    else if (count) 
+    {
+      front_el = nullptr;
       end_el = nullptr;
-      delete count;
-      count = nullptr;
+      delete p;
+      count--;
     }
   }
 };

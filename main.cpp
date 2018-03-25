@@ -33,21 +33,17 @@ int main() {
   auto my = my_container<int>{};
 
   my.push(1);
-  std::cout << my.front() << " " << my.back() << std::endl;
   my.push(2);
-  std::cout << my.front() << " " << my.back() << std::endl;
   my.push(3);
-  std::cout << my.front() << " " << my.back() << std::endl;
   my.push(4);
-  std::cout << my.front() << " " << my.back() << std::endl;
   my.pop();
-  std::cout << my.front() << " " << my.back() << std::endl;
   my.pop();
-  std::cout << my.front() << " " << my.back() << std::endl;
   my.pop();
-  std::cout << my.front() << " " << my.back() << std::endl;
   my.pop();
-  std::cout << my.front() << " " << my.back() << std::endl;
+  my.pop();
+  my.push(2);
+  my.push(3);
+  my.push(4);
 
   return 0;
 }
