@@ -1,6 +1,6 @@
 template<typename T>
 class my_allocator {
-  const size_t N = 10;
+  size_t N = 10;
   size_t cout = 0;
   T* p;
 public:
@@ -45,5 +45,4 @@ public:
     std::cout << __PRETTY_FUNCTION__ << std::endl;
     p->~T();
   }
-
 };
