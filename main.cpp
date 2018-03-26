@@ -32,10 +32,6 @@ int main() {
   for (int i = 0; i < 10; i++)
     my1.push(i);
   
-  for (auto it : my1)
-    std::cout << it.data << " ";
-  std::cout << std::endl;
-
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
   auto my2 = my_container<int,my_allocator<element<int>,10>>{};
   for (int i = 0; i < 10; i++)
