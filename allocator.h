@@ -1,6 +1,5 @@
-template<typename T>
+template<typename T,size_t N = 1>
 class my_allocator {
-  size_t N = 10;
   size_t count = 0;
   T* p;
 public:
@@ -13,7 +12,7 @@ public:
 
   template<typename U>
   struct rebind {
-    using other = my_allocator<U>;
+    using other = my_allocator<U,N>;
   };
 
   T* allocate(std::size_t n) {
@@ -29,12 +28,12 @@ public:
   }
 
   void deallocate(T* p,std::size_t n) {
-    if (!count) {
+
+    if (!count) 
       return;
-    }
-    if (!(--count%N)) {
+
+    if (!(--count%N)) 
       std::free(p); 
-    }
   }
 
   template<typename U, typename ... Args>

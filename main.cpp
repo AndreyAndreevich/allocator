@@ -19,7 +19,7 @@ int main() {
   }
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  auto map2 = std::map<int, int, std::less<int>, my_allocator<std::pair<const int,int>>>{};
+  auto map2 = std::map<int, int, std::less<int>, my_allocator<std::pair<const int,int>,10>>{};
   for (size_t i = 0; i < 10; ++i)
     map2[i] = factorial(i);
   std::cout << std::endl;
@@ -37,7 +37,7 @@ int main() {
   std::cout << std::endl;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  auto my2 = my_container<int,my_allocator<element<int>>>{};
+  auto my2 = my_container<int,my_allocator<element<int>,10>>{};
   for (int i = 0; i < 10; i++)
     my2.push(i);
  
