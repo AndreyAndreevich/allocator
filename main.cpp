@@ -2,14 +2,9 @@
 #include <vector>
 #include <map>
 
+#include "functions.h"
 #include "allocator.h"
 #include "container.h"
-
-size_t factorial(size_t N) {
-  if(N)
-    return(N*factorial(N-1));
-  return 1;
-}
 
 int main() {
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////
