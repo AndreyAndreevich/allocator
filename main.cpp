@@ -19,7 +19,7 @@ int main() {
     map2[i] = factorial(i);
   std::cout << std::endl;
 
-  for (const auto &i : map1)
+  for (const auto &i : map2)
     std::cout << i.first << " " << i.second << std::endl;
 
   /////////////////////////////////////////////////////////////////////////////////////////////////////////////

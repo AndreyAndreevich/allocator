@@ -26,16 +26,8 @@ public:
   }
 
   ~my_container() {
-    while (count) {
-      auto next_el = front_el;
-      for (int i = 1; i < count; i++) {
-        next_el = next_el->next;
-      }
-      end_el = next_el;
-      alloc.destroy(end_el);
-      alloc.deallocate(end_el,1);
-      count--;
-    }
+    while(count)
+      pop();
   }
 
   void push(T data) {
@@ -51,6 +43,20 @@ public:
       end_el = front_el;
     }
     count++;
+  }
+
+  void pop() {
+    if (!count)
+      return;
+    
+    count--;
+
+    auto next_el = front_el->next;
+
+    alloc.destroy(front_el);
+    alloc.deallocate(front_el,1);
+
+    front_el = next_el;
   }
 
   T front() {

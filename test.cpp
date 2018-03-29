@@ -22,10 +22,10 @@ BOOST_AUTO_TEST_SUITE(allocator_test)
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-    BOOST_AUTO_TEST_CASE(std_map_with_custom_allocator_15)
+    BOOST_AUTO_TEST_CASE(std_map_with_custom_allocator_12)
     {
       auto map = std::map<int, int, std::less<int>, my_allocator<std::pair<const int,int>,10>>{};
-      for (size_t i = 0; i < 9; ++i) ///
+      for (size_t i = 0; i < 12; ++i) ///
         map[i] = factorial(i);
 
       int count = 0;
