@@ -2,8 +2,10 @@
 #include <list>
 #include <algorithm>
 
+namespace my {
+
 template<typename T,size_t N = 1>
-class my_allocator {
+class allocator {
 
   struct memory_control_struct {
     memory_control_struct(T* p) {
@@ -29,14 +31,15 @@ public:
 
   template<typename U>
   struct rebind {
-    using other = my_allocator<U,N>;
+    using other = allocator<U,N>;
   };
 
   T* allocate(std::size_t n) {
+    
     T* ptr;
 
     auto free_block = std::find_if(control.begin(),control.end(),[](memory_control_struct element) {
-      return element.count != 10;
+      return element.count != N;
     });
     
     if(free_block == control.end()) {
@@ -60,6 +63,7 @@ public:
   }
 
   void deallocate(T* ptr,std::size_t n) {
+
     if (control.empty()) 
       return;
 
@@ -85,3 +89,5 @@ public:
     ptr->~T();
   }
 };
+
+}

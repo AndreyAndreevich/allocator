@@ -1,4 +1,4 @@
-constexpr size_t factorial(size_t N)
+constexpr auto factorial(auto N) -> decltype(N)
 {
-    return N < 2 ? 1 : (N * factorial(N - 1));
+    return N ? (N * factorial(N - 1)) : 1;
 }

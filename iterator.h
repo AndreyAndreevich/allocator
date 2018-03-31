@@ -1,31 +1,18 @@
+namespace my {
+
 template<typename T>
-class my_iterator {
+class iterator : public std::iterator<std::input_iterator_tag,T> {
 public:
-    my_iterator(T *first) {
+    iterator(T *first) {
         current = first;
     }
 
-    T &operator+(int n) {
-        for(int i = 0; i < n; i++)
-            current = current->next;
-        return *current;
-    }
-
-    T &operator++(int) {
+    iterator &operator++() {
       current = current->next;
-      return *current;
+      return *this;
     }
 
-    T &operator++() {
-      current = current->next;
-      return *current;
-    }
-
-    bool operator==(const my_iterator &it) {
-        return current == it.current;
-    }
-
-    bool operator!=(const my_iterator &it) {
+    bool operator!=(const iterator &it) {
         return current != it.current;
     }
     
@@ -35,3 +22,5 @@ public:
 private:
     T *current;
 };
+
+}

@@ -1,5 +1,7 @@
   #include "iterator.h"
   
+  namespace my {
+
   template<typename T>
   struct element {
     element* next = nullptr;
@@ -9,7 +11,7 @@
 template<
   typename T,
   class Allocator = std::allocator<element<T>>
-> class my_container {
+> class container {
 
   Allocator alloc;
   size_t count = 0;
@@ -18,14 +20,14 @@ template<
 
 public:
 
-  using iterator = my_iterator<element<T>>;
+  using iterator = my::iterator<element<T>>;
 
-  my_container(std::initializer_list<T> values) {
+  container(std::initializer_list<T> values) {
     for (auto value : values)
       push(value);
   }
 
-  ~my_container() {
+  ~container() {
     while(count)
       pop();
   }
@@ -59,6 +61,11 @@ public:
     front_el = next_el;
   }
 
+  void clear() {
+    while(count)
+      pop();
+  }
+
   T front() {
     if (count)
       return front_el->data;
@@ -81,3 +88,5 @@ public:
     return count;
   }
 };
+
+}
