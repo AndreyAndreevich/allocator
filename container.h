@@ -1,17 +1,51 @@
-  #include "iterator.h"
-  
-  namespace my {
+#include <iostream>
 
-  template<typename T>
-  struct element {
-    element* next = nullptr;
-    T data;
-  };
+namespace my {
+
+//---------------------<data>----------------------------------------------------------------
+
+template<typename T>
+struct element {
+  element* next = nullptr;
+  T data;
+};
+
+//---------------------</data>----------------------------------------------------------------
+
+
+//---------------------<container>------------------------------------------------------------
 
 template<
   typename T,
   class Allocator = std::allocator<element<T>>
 > class container {
+
+//---------------------<iterator>-------------------------------------------------------------
+
+  template<typename U>
+  class _iterator : public std::iterator<std::input_iterator_tag,U> {
+  public:
+      _iterator(U *first) {
+          current = first;
+      }
+
+      _iterator &operator++() {
+        current = current->next;
+        return *this;
+      }
+
+      bool operator!=(const _iterator &it) {
+          return current != it.current;
+      }
+
+      U &operator*() {
+          return *current;
+      }
+  private:
+    U *current;
+  };
+
+//---------------------</iterator>------------------------------------------------------------
 
   Allocator alloc;
   size_t count = 0;
@@ -20,7 +54,7 @@ template<
 
 public:
 
-  using iterator = my::iterator<element<T>>;
+  using iterator = _iterator<element<T>>;
 
   container(std::initializer_list<T> values) {
     for (auto value : values)
@@ -33,17 +67,12 @@ public:
   }
 
   void push(T data) {
-    if (count) {
-      end_el->next = alloc.allocate(1);
-      alloc.construct(end_el->next, *end_el->next);
-      end_el = end_el->next;
-      end_el->data = data;
-    } else {
-      front_el = alloc.allocate(1);
-      alloc.construct(front_el, *front_el);
-      front_el->data = data;
-      end_el = front_el;
-    }
+    element<T> **ptr = count ? &end_el->next : &front_el;
+    *ptr = alloc.allocate(1);
+    alloc.construct(*ptr, **ptr);
+    (*ptr)->data = data;
+    end_el = *ptr;
+
     count++;
   }
 
@@ -58,7 +87,7 @@ public:
     alloc.destroy(front_el);
     alloc.deallocate(front_el,1);
 
-    front_el = next_el;
+    front_el = next_el;   
   }
 
   void clear() {
@@ -88,5 +117,7 @@ public:
     return count;
   }
 };
+
+//---------------------</container>------------------------------------------------------------
 
 }
