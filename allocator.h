@@ -9,8 +9,7 @@ class allocator {
 
 //-------------<control_block>------------------------------------
 
-  struct memory_control_block 
-  {
+  struct memory_control_block {
     memory_control_block(T* p) {
       is_free.fill(false);
       ptr_begin = p;
@@ -44,28 +43,28 @@ public:
     
     T* ptr;
 
-    auto free_block = std::find_if(control_block.begin(),control_block.end(),
+    auto block = std::find_if(control_block.begin(),control_block.end(),
     [](memory_control_block element) {
       return element.count != N;
     });
     
-    if(free_block == control_block.end()) {
+    if(block == control_block.end()) {
       ptr = reinterpret_cast<T *>(std::malloc(N*n*sizeof(T)));
       if (!ptr)
         throw std::bad_alloc();
       control_block.emplace_back(ptr);
     } else {
-      auto free_cell = std::find_if(free_block->is_free.begin(),free_block->is_free.end(),
+      auto free_cell = std::find_if(block->is_free.begin(),block->is_free.end(),
       [](bool element){
         return !element;
       });
 
-      int number_free_cell = free_cell - free_block->is_free.begin();
+      int number_free_cell = free_cell - block->is_free.begin();
 
-      ptr = free_block->ptr_begin + number_free_cell;
+      ptr = block->ptr_begin + number_free_cell;
 
       *free_cell = true;
-      free_block->count++;
+      block->count++;
     }
     return ptr;
   }
